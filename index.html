@@ -176,7 +176,8 @@
     .now-next-strip{display:none}
     body.kiosk-mode .now-next-strip{display:flex;align-items:center;gap:1.75rem;position:sticky;top:0;z-index:40;background:#17231d;margin-left:-3.5vw;margin-right:-3.5vw;padding:.85rem 3.5vw;min-height:60px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
     body.kiosk-mode .now-next-strip .nn-stack{display:flex;flex-direction:column;gap:.5rem;min-width:0;flex:1}
-    body.kiosk-mode .now-next-strip .nn-item{display:flex;align-items:center;gap:.75rem;min-width:0}
+    body.kiosk-mode .now-next-strip .nn-item{display:flex;align-items:flex-start;gap:.75rem;min-width:0}
+    body.kiosk-mode .now-next-strip .nn-body{display:flex;flex-direction:column;gap:.4rem;min-width:0;flex:1;padding-top:.15rem}
     body.kiosk-mode .now-next-strip .nn-label{flex-shrink:0;font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;padding:.3rem .7rem;border-radius:999px;color:#17231d;background:#fff}
     body.kiosk-mode .now-next-strip .nn-current .nn-label{background:#e11d1d;color:#fff}
     body.kiosk-mode .now-next-strip .nn-upcoming .nn-label{background:var(--orange);color:#fff}
@@ -185,6 +186,15 @@
     body.kiosk-mode .now-next-strip .nn-text.nn-clickable{cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.5px}
     body.kiosk-mode .now-next-strip .nn-text.nn-clickable:hover,
     body.kiosk-mode .now-next-strip .nn-text.nn-clickable:active{opacity:.8}
+    /* Multi-session summary: "N sessions now", tap to expand/collapse the list */
+    body.kiosk-mode .now-next-strip .nn-summary-btn{display:inline-flex;align-items:center;gap:.4rem;background:none;border:none;padding:0;color:#fff;font-size:1.05rem;font-weight:600;cursor:pointer;text-align:left;white-space:nowrap}
+    body.kiosk-mode .now-next-strip .nn-summary-btn:hover,
+    body.kiosk-mode .now-next-strip .nn-summary-btn:active{opacity:.85}
+    body.kiosk-mode .now-next-strip .nn-chevron{font-size:.7rem;transition:transform .15s ease}
+    body.kiosk-mode .now-next-strip .nn-list{display:flex;flex-direction:column;gap:.3rem}
+    body.kiosk-mode .now-next-strip .nn-list-item{display:block;background:rgba(255,255,255,.1);border:none;border-radius:.5rem;padding:.4rem .65rem;color:#fff;font-size:.92rem;font-weight:500;text-align:left;cursor:pointer;white-space:normal;line-height:1.35}
+    body.kiosk-mode .now-next-strip .nn-list-item:hover,
+    body.kiosk-mode .now-next-strip .nn-list-item:active{background:rgba(255,255,255,.2)}
     /* Day nav sits right below the strip instead of overlapping it */
     body.kiosk-mode .day-navigation{top:var(--nn-strip-h, 60px)}
 
@@ -250,8 +260,8 @@
     <main class="mx-auto w-full max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
       <div id="now-next-strip" class="now-next-strip" aria-live="polite">
         <div class="nn-stack">
-          <span class="nn-item nn-current"><span class="nn-label">Now</span><span class="nn-text nn-muted">—</span></span>
-          <span class="nn-item nn-upcoming"><span class="nn-label">Next</span><span class="nn-text nn-muted">—</span></span>
+          <span class="nn-item nn-current"><span class="nn-label">Now</span><span class="nn-body"><span class="nn-text nn-muted">—</span></span></span>
+          <span class="nn-item nn-upcoming"><span class="nn-label">Next</span><span class="nn-body"><span class="nn-text nn-muted">—</span></span></span>
         </div>
         <div id="qr-panel"><img id="qr-code-img" src="https://raw.githubusercontent.com/MBurlesonOMAG/OMAG-2026-sewer-agenda/main/images/LINK%20QR%20-%20Agenda.jpg" alt="QR code linking to this agenda" width="44" height="44"><span>Scan for the agenda on your phone</span></div>
       </div>
@@ -1002,7 +1012,61 @@
       }, 150);
     }
 
+    // Renders one row (Now or Next) into its .nn-body container. `pairs` is
+    // a flat list of { title, group } — usually all from the same time slot,
+    // but built generically in case of ever having truly separate groups.
+    // Single session: shows the title directly, click jumps to it.
+    // Multiple: collapses to "N sessions now/next", tap to expand a list of
+    // each title (each individually clickable to jump).
+    function renderNNRow(itemEl, pairs, muteText, expanded, onToggle, suffix) {
+      const body = itemEl.querySelector(".nn-body");
+      if (!body) return;
+      body.innerHTML = "";
+
+      if (!pairs.length) {
+        const span = document.createElement("span");
+        span.className = "nn-text nn-muted";
+        span.textContent = muteText;
+        body.appendChild(span);
+        return;
+      }
+
+      if (pairs.length === 1) {
+        const span = document.createElement("span");
+        span.className = "nn-text nn-clickable";
+        span.textContent = pairs[0].title + (suffix ? " · " + suffix : "");
+        span.onclick = () => jumpToGroup(pairs[0].group);
+        body.appendChild(span);
+        return;
+      }
+
+      const summary = document.createElement("button");
+      summary.type = "button";
+      summary.className = "nn-summary-btn";
+      summary.setAttribute("aria-expanded", String(expanded));
+      const countLabel = pairs.length + " sessions" + (suffix ? " · " + suffix : "");
+      summary.innerHTML = countLabel + ' <span class="nn-chevron">' + (expanded ? "▲" : "▼") + "</span>";
+      summary.onclick = onToggle;
+      body.appendChild(summary);
+
+      if (expanded) {
+        const list = document.createElement("div");
+        list.className = "nn-list";
+        pairs.forEach(p => {
+          const item = document.createElement("button");
+          item.type = "button";
+          item.className = "nn-list-item";
+          item.textContent = p.title;
+          item.onclick = () => jumpToGroup(p.group);
+          list.appendChild(item);
+        });
+        body.appendChild(list);
+      }
+    }
+
     let lastNowSignature = null;
+    let lastCurrentSig = null, lastNextSig = null;
+    let nowExpanded = false, nextExpanded = false;
     function updateNowNextAndAutoFocus() {
       const strip = document.getElementById("now-next-strip");
       const now = getChicagoNow();
@@ -1011,34 +1075,28 @@
       const upcoming = groups.filter(g => g.start > now);
       const next = upcoming.length ? upcoming[0] : null;
 
+      const signature = current.map(g => g.start.getTime()).join(",");
+      const nextSignature = next ? String(next.start.getTime()) : "";
+      if (signature !== lastCurrentSig) { nowExpanded = false; lastCurrentSig = signature; }
+      if (nextSignature !== lastNextSig) { nextExpanded = false; lastNextSig = nextSignature; }
+
       if (strip) {
-        const nowTextEl = strip.querySelector(".nn-current .nn-text");
-        const nextTextEl = strip.querySelector(".nn-upcoming .nn-text");
-        if (nowTextEl) {
-          if (current.length) {
-            nowTextEl.textContent = current.flatMap(g => g.titles).join(" · ");
-            nowTextEl.classList.remove("nn-muted");
-            nowTextEl.classList.add("nn-clickable");
-            nowTextEl.onclick = () => jumpToGroup(current[0]);
-          } else {
-            nowTextEl.textContent = "No session in progress";
-            nowTextEl.classList.add("nn-muted");
-            nowTextEl.classList.remove("nn-clickable");
-            nowTextEl.onclick = null;
-          }
+        const nowItem = strip.querySelector(".nn-current");
+        const nextItem = strip.querySelector(".nn-upcoming");
+        const currentPairs = current.flatMap(g => g.titles.map(t => ({ title: t, group: g })));
+        const nextPairs = next ? next.titles.map(t => ({ title: t, group: next })) : [];
+
+        if (nowItem) {
+          renderNNRow(nowItem, currentPairs, "No session in progress", nowExpanded, () => {
+            nowExpanded = !nowExpanded;
+            updateNowNextAndAutoFocus();
+          }, null);
         }
-        if (nextTextEl) {
-          if (next) {
-            nextTextEl.textContent = next.titles.join(" · ") + " · " + fmtClockTime(next.start);
-            nextTextEl.classList.remove("nn-muted");
-            nextTextEl.classList.add("nn-clickable");
-            nextTextEl.onclick = () => jumpToGroup(next);
-          } else {
-            nextTextEl.textContent = "That's the last session";
-            nextTextEl.classList.add("nn-muted");
-            nextTextEl.classList.remove("nn-clickable");
-            nextTextEl.onclick = null;
-          }
+        if (nextItem) {
+          renderNNRow(nextItem, nextPairs, "That's the last session", nextExpanded, () => {
+            nextExpanded = !nextExpanded;
+            updateNowNextAndAutoFocus();
+          }, next ? fmtClockTime(next.start) : null);
         }
       }
 
@@ -1046,7 +1104,6 @@
       // and only when the set of "now" sessions actually changes (so we're
       // not fighting anyone who's manually browsing a different day).
       if (!document.body.classList.contains("kiosk-mode")) return;
-      const signature = current.map(g => g.start.getTime()).join(",");
       if (signature === lastNowSignature) return;
       lastNowSignature = signature;
       if (!current.length) return;
