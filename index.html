@@ -24,6 +24,7 @@
   <!-- NOTE: only three external dependencies now: Tailwind (utility classes), -->
   <!-- Google Fonts (Fraunces + Work Sans), and Lucide (icons, bumped to a current version). -->
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -115,9 +116,119 @@
     @media(prefers-reduced-motion:reduce){
       *,*:before,*:after{transition-duration:.01ms!important;scroll-behavior:auto!important}
     }
+
+    /* ================================================================
+       KIOSK MODE
+       Applied via body.kiosk-mode when the page auto-detects a large
+       portrait display (or is forced with ?kiosk=1 / the corner toggle).
+       Scales up type and touch targets for viewing/tapping from a few
+       feet away, and hides UI that doesn't make sense on a walk-up
+       public display (per-session .ics downloads).
+       ================================================================ */
+    body.kiosk-mode{font-size:19px}
+    body.kiosk-mode .app-wrapper{max-width:none}
+    body.kiosk-mode main{max-width:none;padding-left:3.5vw;padding-right:3.5vw;padding-top:2.5vw;padding-bottom:4vw}
+    body.kiosk-mode header{padding-top:3vw;padding-bottom:3vw}
+    body.kiosk-mode header .max-w-6xl{max-width:none}
+    body.kiosk-mode header img{max-width:280px!important}
+    body.kiosk-mode header h1{font-size:64px!important}
+    body.kiosk-mode header p{font-size:24px!important}
+    body.kiosk-mode #agenda-heading{font-size:52px!important}
+    body.kiosk-mode .mb-8.grid{gap:1.5rem}
+    body.kiosk-mode .mb-8.grid > div{padding:1.75rem}
+    body.kiosk-mode .mb-8.grid .text-xs{font-size:.95rem}
+    body.kiosk-mode .mb-8.grid .text-sm{font-size:1.15rem}
+    body.kiosk-mode .mb-8.grid .activity-pill{font-size:1rem;padding:.5rem 1rem}
+    body.kiosk-mode .day-tab{padding:1.4rem 1rem;font-size:1.6rem;border-radius:1rem}
+    body.kiosk-mode .day-status{font-size:1.15rem}
+    body.kiosk-mode .day-status svg{width:1.4rem;height:1.4rem}
+    body.kiosk-mode .track-chip{font-size:1.15rem;padding:.75rem 1.4rem;min-height:56px}
+    body.kiosk-mode .toolbar-btn{font-size:1.15rem;padding:.75rem 1.4rem;min-height:56px}
+    body.kiosk-mode .toolbar-btn svg,body.kiosk-mode .track-chip svg{width:1.2rem;height:1.2rem}
+    body.kiosk-mode section#monday-panel h2,
+    body.kiosk-mode section#tuesday-panel h2,
+    body.kiosk-mode section#wednesday-panel h2{font-size:44px!important}
+    body.kiosk-mode .time-label{font-size:1.6rem!important;margin-bottom:1rem}
+    body.kiosk-mode .time-label:before{width:14px;height:14px}
+    body.kiosk-mode .session-grid{gap:1.25rem}
+    body.kiosk-mode .session-card{border-radius:1.1rem;border-width:2px}
+    body.kiosk-mode .session-card summary{padding:1.5rem 1.6rem}
+    body.kiosk-mode .session-card .activity-pill{font-size:.9rem;padding:.4rem .85rem}
+    body.kiosk-mode .session-card summary .font-bold.block,
+    body.kiosk-mode .session-card summary .block.font-bold{font-size:1.55rem!important}
+    body.kiosk-mode .session-card summary .mt-1.block{font-size:1.15rem!important}
+    body.kiosk-mode .session-card summary .chevron{width:1.75rem;height:1.75rem}
+    body.kiosk-mode .session-detail{padding:1.5rem 1.6rem 1.75rem}
+    body.kiosk-mode .session-detail p{font-size:1.2rem!important;line-height:1.7}
+    body.kiosk-mode .live-now-badge{font-size:.9rem;padding:.3rem .85rem}
+    /* Per-session Add-to-calendar downloads don't make sense on a public kiosk */
+    body.kiosk-mode .ics-btn{display:none!important}
+    body.kiosk-mode footer{padding:2rem 3.5vw}
+    body.kiosk-mode footer p{font-size:1.05rem!important}
+    body.kiosk-mode footer img{max-width:220px!important}
+
+    /* Touch hardening: only restricts gestures while kiosk-mode is active,
+       never affects normal phone/desktop browsing */
+    body.kiosk-mode{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+
+    /* Live Now / Up Next strip, sticky at the very top in kiosk mode */
+    .now-next-strip{display:none}
+    body.kiosk-mode .now-next-strip{display:flex;flex-wrap:wrap;gap:2rem;align-items:center;position:sticky;top:0;z-index:40;background:#17231d;margin-left:-3.5vw;margin-right:-3.5vw;padding:.85rem 3.5vw;min-height:60px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+    body.kiosk-mode .now-next-strip .nn-item{display:flex;align-items:center;gap:.75rem;min-width:0}
+    body.kiosk-mode .now-next-strip .nn-label{flex-shrink:0;font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;padding:.3rem .7rem;border-radius:999px;color:#17231d;background:#fff}
+    body.kiosk-mode .now-next-strip .nn-current .nn-label{background:#e11d1d;color:#fff}
+    body.kiosk-mode .now-next-strip .nn-upcoming .nn-label{background:var(--orange);color:#fff}
+    body.kiosk-mode .now-next-strip .nn-text{color:#fff;font-size:1.05rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    body.kiosk-mode .now-next-strip .nn-muted{color:rgba(255,255,255,.55);font-weight:500}
+    /* Day nav sits right below the strip instead of overlapping it */
+    body.kiosk-mode .day-navigation{top:60px}
+
+    /* Persistent clock in the header, kiosk-only */
+    .kiosk-clock-only{display:none}
+    body.kiosk-mode .kiosk-clock-only{display:block;margin-top:.5rem;font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:.02em}
+
+    /* QR code panel linking to the same page's normal (mobile) view,
+       bottom-left corner, mirrors the mode-toggle button on the right */
+    #qr-panel{display:none}
+    body.kiosk-mode #qr-panel{display:flex;flex-direction:column;align-items:center;gap:.5rem;position:fixed;left:20px;bottom:20px;z-index:45;background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:0 8px 20px rgba(23,35,29,.18)}
+    body.kiosk-mode #qr-panel canvas{width:120px;height:120px}
+    body.kiosk-mode #qr-panel span{font-size:.85rem;font-weight:700;color:var(--ink);text-align:center;max-width:120px;line-height:1.25}
+
+    /* Small, unobtrusive manual override control, bottom-right corner */
+    #mode-toggle-btn{position:fixed;bottom:14px;right:14px;z-index:50;border:1px solid var(--line);background:rgba(255,255,255,.9);color:var(--muted);font-size:.68rem;font-weight:600;padding:.35rem .65rem;border-radius:999px;cursor:pointer;opacity:.35;transition:opacity .2s ease;backdrop-filter:blur(2px)}
+    #mode-toggle-btn:hover,#mode-toggle-btn:focus-visible{opacity:1}
+    body.kiosk-mode #mode-toggle-btn{font-size:1rem;padding:.6rem 1.1rem;bottom:20px;right:20px}
   </style>
 </head>
 <body style="background: rgb(238, 240, 237);">
+  <script>
+  // Runs immediately (before the rest of the page renders) so there's no
+  // flash of the wrong mode. Full toggle/resize wiring happens later,
+  // once the DOM is ready, in the main script block at the bottom.
+  (function () {
+    function computeAutoMode() {
+      var w = window.innerWidth, h = window.innerHeight;
+      // Heuristic for a large portrait kiosk display (e.g. 1080x1920):
+      // tall, and wide enough to rule out phones held in portrait.
+      var isLargePortrait = h > w && w >= 900 && h >= 1400;
+      return isLargePortrait ? "kiosk" : "normal";
+    }
+    var saved = "auto";
+    try { saved = localStorage.getItem("sewerExpoDisplayMode") || "auto"; } catch (e) {}
+    var effective = saved === "auto" ? computeAutoMode() : saved;
+    if (effective === "kiosk") {
+      document.body.classList.add("kiosk-mode");
+      // Lock pinch/double-tap zoom on the kiosk touchscreen. The head is
+      // already parsed by this point, so the viewport meta tag exists.
+      var vp = document.querySelector('meta[name="viewport"]');
+      if (vp) vp.setAttribute("content", "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no");
+    }
+    window.__sewerExpoSavedMode = saved;
+    window.__sewerExpoComputeAutoMode = computeAutoMode;
+  })();
+  </script>
+  <button type="button" id="mode-toggle-btn" aria-label="Switch display mode">Auto display mode</button>
+  <div id="qr-panel"><canvas id="qr-canvas"></canvas><span>Scan for the agenda on your phone</span></div>
   <div class="app-wrapper w-full">
     <header class="w-full px-5 py-7 sm:px-8" style="background:#000;">
       <div class="mx-auto flex max-w-6xl flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
@@ -125,11 +236,16 @@
         <div class="sm:text-right">
           <h1 class="display-font mt-1 leading-tight" style="color:#fff;font-size:42px;">2026 Agenda</h1>
           <p class="mt-2" style="color:#fffaf0;font-size:16px;">October 12–14, 2026 · Stride Bank Center · Enid, Oklahoma</p>
+          <p id="kiosk-clock" class="kiosk-clock-only" aria-live="off"></p>
         </div>
       </div>
     </header>
 
     <main class="mx-auto w-full max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
+      <div id="now-next-strip" class="now-next-strip" aria-live="polite">
+        <span class="nn-item nn-current"><span class="nn-label">Now</span><span class="nn-text nn-muted">—</span></span>
+        <span class="nn-item nn-upcoming"><span class="nn-label">Next</span><span class="nn-text nn-muted">—</span></span>
+      </div>
       <section aria-labelledby="agenda-heading">
         <div class="mb-8 grid gap-4 sm:grid-cols-3">
           <div class="rounded-xl border border-[#d8d4ca] p-5 shadow-sm" style="background:#fff;">
@@ -617,6 +733,68 @@
 
   <script>
   document.addEventListener("DOMContentLoaded", () => {
+    // --- Display mode: auto-detect kiosk vs. normal, with manual override ---
+    (function () {
+      const btn = document.getElementById("mode-toggle-btn");
+      const STORAGE_KEY = "sewerExpoDisplayMode";
+      const labels = { auto: "Auto display mode", kiosk: "Kiosk mode (tap for auto)", normal: "Standard mode (tap for auto)" };
+      const viewportMeta = document.querySelector('meta[name="viewport"]');
+      const VIEWPORT_NORMAL = "width=device-width, initial-scale=1.0";
+      const VIEWPORT_KIOSK = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+
+      function getSavedMode() {
+        try { return localStorage.getItem(STORAGE_KEY) || "auto"; } catch (e) { return "auto"; }
+      }
+      function setSavedMode(mode) {
+        try { localStorage.setItem(STORAGE_KEY, mode); } catch (e) {}
+      }
+      function computeAutoMode() {
+        return (window.__sewerExpoComputeAutoMode ? window.__sewerExpoComputeAutoMode() : (() => {
+          const w = window.innerWidth, h = window.innerHeight;
+          return (h > w && w >= 900 && h >= 1400) ? "kiosk" : "normal";
+        })());
+      }
+      function applyMode(saved) {
+        const effective = saved === "auto" ? computeAutoMode() : saved;
+        document.body.classList.toggle("kiosk-mode", effective === "kiosk");
+        if (viewportMeta) viewportMeta.setAttribute("content", effective === "kiosk" ? VIEWPORT_KIOSK : VIEWPORT_NORMAL);
+        if (btn) btn.textContent = saved === "auto" ? labels.auto + (effective === "kiosk" ? " (kiosk)" : " (standard)") : labels[saved];
+      }
+
+      // Touch hardening: only active while kiosk-mode is on the body, so a
+      // regular phone/desktop visitor never has these gestures blocked.
+      document.addEventListener("contextmenu", (e) => {
+        if (document.body.classList.contains("kiosk-mode")) e.preventDefault();
+      });
+      document.addEventListener("gesturestart", (e) => {
+        if (document.body.classList.contains("kiosk-mode")) e.preventDefault();
+      });
+      document.addEventListener("gesturechange", (e) => {
+        if (document.body.classList.contains("kiosk-mode")) e.preventDefault();
+      });
+
+      let currentSaved = getSavedMode();
+      applyMode(currentSaved);
+
+      if (btn) {
+        btn.addEventListener("click", () => {
+          // Cycle: auto -> kiosk (forced) -> normal (forced) -> auto -> ...
+          currentSaved = currentSaved === "auto" ? "kiosk" : currentSaved === "kiosk" ? "normal" : "auto";
+          setSavedMode(currentSaved);
+          applyMode(currentSaved);
+        });
+      }
+
+      // Re-run auto-detection on resize/rotation (e.g. a kiosk browser window
+      // getting resized, or a tablet rotating), but only while in "auto".
+      let resizeTimer = null;
+      window.addEventListener("resize", () => {
+        if (currentSaved !== "auto") return;
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => applyMode(currentSaved), 250);
+      });
+    })();
+
     const tabs = [...document.querySelectorAll('[role="tab"]')];
     const status = document.getElementById("active-day-status");
     const panels = {
@@ -758,6 +936,149 @@
     }
     updateHappeningNow();
     setInterval(updateHappeningNow, 60000);
+
+    // --- Live Now / Up Next strip + auto-focus the current session (kiosk-mode only) ---
+    function collectAllTimeGroups() {
+      return [...document.querySelectorAll(".time-group")].map(group => {
+        const label = group.querySelector(".time-label[data-start]");
+        if (!label) return null;
+        const cards = [...group.querySelectorAll(".session-card")];
+        const titles = cards.map(c => {
+          const t = c.querySelector("summary .font-bold.block, summary .block.font-bold");
+          return t ? t.textContent.trim() : null;
+        }).filter(Boolean);
+        const dayPanel = group.closest(".day-panel");
+        return {
+          start: new Date(label.dataset.start),
+          end: new Date(label.dataset.end),
+          titles, cards, group,
+          dayId: dayPanel ? dayPanel.id : null
+        };
+      }).filter(Boolean).sort((a, b) => a.start - b.start);
+    }
+
+    function fmtClockTime(d) {
+      return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+    }
+
+    let lastNowSignature = null;
+    function updateNowNextAndAutoFocus() {
+      const strip = document.getElementById("now-next-strip");
+      const now = getChicagoNow();
+      const groups = collectAllTimeGroups();
+      const current = groups.filter(g => now >= g.start && now <= g.end);
+      const upcoming = groups.filter(g => g.start > now);
+      const next = upcoming.length ? upcoming[0] : null;
+
+      if (strip) {
+        const nowTextEl = strip.querySelector(".nn-current .nn-text");
+        const nextTextEl = strip.querySelector(".nn-upcoming .nn-text");
+        if (nowTextEl) {
+          if (current.length) {
+            nowTextEl.textContent = current.flatMap(g => g.titles).join(" · ");
+            nowTextEl.classList.remove("nn-muted");
+          } else {
+            nowTextEl.textContent = "No session in progress";
+            nowTextEl.classList.add("nn-muted");
+          }
+        }
+        if (nextTextEl) {
+          if (next) {
+            nextTextEl.textContent = next.titles.join(" · ") + " · " + fmtClockTime(next.start);
+            nextTextEl.classList.remove("nn-muted");
+          } else {
+            nextTextEl.textContent = "That's the last session";
+            nextTextEl.classList.add("nn-muted");
+          }
+        }
+      }
+
+      // Auto-expand + jump to the current session, but only in kiosk mode,
+      // and only when the set of "now" sessions actually changes (so we're
+      // not fighting anyone who's manually browsing a different day).
+      if (!document.body.classList.contains("kiosk-mode")) return;
+      const signature = current.map(g => g.start.getTime()).join(",");
+      if (signature === lastNowSignature) return;
+      lastNowSignature = signature;
+      if (!current.length) return;
+
+      const targetDayId = current[0].dayId;
+      const targetTab = tabs.find(t => panels[t.id] && panels[t.id].id === targetDayId);
+      if (targetTab && targetTab.getAttribute("aria-selected") !== "true") {
+        selectDay(targetTab);
+      }
+      current.forEach(g => g.cards.forEach(c => { c.open = true; }));
+      setTimeout(() => {
+        if (current[0].group) current[0].group.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 150);
+    }
+    updateNowNextAndAutoFocus();
+    setInterval(updateNowNextAndAutoFocus, 60000);
+
+    // --- Day auto-advance at midnight, kiosk-mode only (a static reload
+    // won't happen on its own unless the agenda content itself changes) ---
+    function autoAdvanceDayIfNeeded() {
+      if (!document.body.classList.contains("kiosk-mode")) return;
+      const targetId = pickDateBasedDayId();
+      const activeTab = tabs.find(t => t.getAttribute("aria-selected") === "true");
+      if (activeTab && activeTab.id !== targetId) {
+        const targetTab = document.getElementById(targetId);
+        if (targetTab) selectDay(targetTab, { skipHash: true });
+      }
+    }
+    setInterval(autoAdvanceDayIfNeeded, 60000);
+
+    // --- Persistent header clock, kiosk-mode only (CSS-hidden otherwise) ---
+    function updateKioskClock() {
+      const el = document.getElementById("kiosk-clock");
+      if (!el) return;
+      const now = getChicagoNow();
+      const time = now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+      const date = now.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+      el.textContent = time + " · " + date + " CT";
+    }
+    updateKioskClock();
+    setInterval(updateKioskClock, 15000);
+
+    // --- QR code linking to this same page (loads in normal/mobile mode
+    // on a phone, since the kiosk-mode class only applies on the kiosk
+    // device itself) ---
+    (function renderQrCode() {
+      const canvas = document.getElementById("qr-canvas");
+      if (!canvas || typeof QRCode === "undefined") return;
+      const cleanUrl = location.origin + location.pathname;
+      QRCode.toCanvas(canvas, cleanUrl, {
+        width: 120, margin: 1,
+        color: { dark: "#17231d", light: "#ffffff" }
+      }, err => { if (err) console.error("QR code generation failed:", err); });
+    })();
+
+    // --- Silent content refresh: periodically checks if the deployed page
+    // has changed (via ETag/Last-Modified) and reloads once the visitor has
+    // been idle for a bit, so agenda edits go live without a manual refresh ---
+    let lastInteractionAt = Date.now();
+    ["touchstart", "mousedown", "keydown"].forEach(evt => {
+      document.addEventListener(evt, () => { lastInteractionAt = Date.now(); }, { passive: true });
+    });
+    let lastContentTag = null;
+    async function checkForContentUpdate() {
+      try {
+        const res = await fetch(location.href, { method: "HEAD", cache: "no-store" });
+        const tag = res.headers.get("etag") || res.headers.get("last-modified");
+        if (!tag) return;
+        if (lastContentTag === null) { lastContentTag = tag; return; }
+        if (tag !== lastContentTag) {
+          const idleMs = Date.now() - lastInteractionAt;
+          if (idleMs > 2 * 60000) {
+            location.reload();
+          } else {
+            lastContentTag = tag; // will retry against this baseline next interval
+          }
+        }
+      } catch (e) { /* offline or blocked this round — try again next interval */ }
+    }
+    checkForContentUpdate();
+    setInterval(checkForContentUpdate, 5 * 60000);
 
     // --- Track filter chips ---
 
