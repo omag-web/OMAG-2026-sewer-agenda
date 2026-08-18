@@ -24,7 +24,6 @@
   <!-- NOTE: only three external dependencies now: Tailwind (utility classes), -->
   <!-- Google Fonts (Fraunces + Work Sans), and Lucide (icons, bumped to a current version). -->
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -191,7 +190,7 @@
        bottom-left corner, mirrors the mode-toggle button on the right */
     #qr-panel{display:none}
     body.kiosk-mode #qr-panel{display:flex;flex-direction:column;align-items:center;gap:.5rem;position:fixed;left:20px;bottom:20px;z-index:45;background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:0 8px 20px rgba(23,35,29,.18)}
-    body.kiosk-mode #qr-panel canvas{width:120px;height:120px}
+    body.kiosk-mode #qr-panel img{width:120px;height:120px;object-fit:contain;border-radius:4px}
     body.kiosk-mode #qr-panel span{font-size:.85rem;font-weight:700;color:var(--ink);text-align:center;max-width:120px;line-height:1.25}
 
     /* Small, unobtrusive manual override control, bottom-right corner */
@@ -228,7 +227,7 @@
   })();
   </script>
   <button type="button" id="mode-toggle-btn" aria-label="Switch display mode">Auto display mode</button>
-  <div id="qr-panel"><canvas id="qr-canvas"></canvas><span>Scan for the agenda on your phone</span></div>
+  <div id="qr-panel"><img id="qr-code-img" src="https://raw.githubusercontent.com/MBurlesonOMAG/OMAG-2026-sewer-agenda/main/images/LINK%20QR%20-%20Agenda.jpg" alt="QR code linking to this agenda" width="120" height="120"><span>Scan for the agenda on your phone</span></div>
   <div class="app-wrapper w-full">
     <header class="w-full px-5 py-7 sm:px-8" style="background:#000;">
       <div class="mx-auto flex max-w-6xl flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
@@ -1040,19 +1039,6 @@
     updateKioskClock();
     setInterval(updateKioskClock, 15000);
 
-    // --- QR code linking to this same page (loads in normal/mobile mode
-    // on a phone, since the kiosk-mode class only applies on the kiosk
-    // device itself) ---
-    (function renderQrCode() {
-      const canvas = document.getElementById("qr-canvas");
-      if (!canvas || typeof QRCode === "undefined") return;
-      const cleanUrl = location.origin + location.pathname;
-      QRCode.toCanvas(canvas, cleanUrl, {
-        width: 120, margin: 1,
-        color: { dark: "#17231d", light: "#ffffff" }
-      }, err => { if (err) console.error("QR code generation failed:", err); });
-    })();
-
     // --- Silent content refresh: periodically checks if the deployed page
     // has changed (via ETag/Last-Modified) and reloads once the visitor has
     // been idle for a bit, so agenda edits go live without a manual refresh ---
@@ -1182,6 +1168,13 @@
     attachImgFallback("header-logo-img", "logo-placeholder", "OMAG Sewer Expo logo");
     attachImgFallback("footer-logo-img", "logo-placeholder", "OMAG Sewer Expo logo");
     attachImgFallback("keynote-photo-img", "speaker-placeholder", "Leo Flowers headshot");
+    const qrImg = document.getElementById("qr-code-img");
+    if (qrImg) {
+      qrImg.addEventListener("error", () => {
+        const panel = document.getElementById("qr-panel");
+        if (panel) panel.style.display = "none";
+      }, { once: true });
+    }
 
     refreshFilters();
     lucide.createIcons();
