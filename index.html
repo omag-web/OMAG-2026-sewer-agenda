@@ -139,6 +139,7 @@
     body.kiosk-mode .mb-8.grid .text-sm{font-size:1.15rem}
     body.kiosk-mode .mb-8.grid .activity-pill{font-size:.78rem;padding:.35rem .75rem}
     body.kiosk-mode .day-tab{padding:1.4rem 1rem;font-size:1.6rem;border-radius:1rem}
+    body.kiosk-mode .day-tab-hidden{display:none}
     body.kiosk-mode .day-status{font-size:1.15rem}
     body.kiosk-mode .day-status svg{width:1.4rem;height:1.4rem}
     body.kiosk-mode .track-chip{font-size:1.15rem;padding:.75rem 1.4rem;min-height:56px}
@@ -763,6 +764,7 @@
         document.body.classList.toggle("kiosk-mode", effective === "kiosk");
         if (viewportMeta) viewportMeta.setAttribute("content", effective === "kiosk" ? VIEWPORT_KIOSK : VIEWPORT_NORMAL);
         if (btn) btn.textContent = saved === "auto" ? labels.auto + (effective === "kiosk" ? " (kiosk)" : " (standard)") : labels[saved];
+        if (window.__sewerExpoUpdateKioskDayVisibility) window.__sewerExpoUpdateKioskDayVisibility();
       }
 
       // Touch hardening: only active while kiosk-mode is on the body, so a
@@ -1048,6 +1050,47 @@
       }
     }
     setInterval(autoAdvanceDayIfNeeded, 60000);
+
+    // --- Hide past-day tabs, kiosk-mode only. Normal browsing always shows
+    // all three days regardless of today's date. ---
+    const DAY_DATES = { "monday-tab": "2026-10-12", "tuesday-tab": "2026-10-13", "wednesday-tab": "2026-10-14" };
+    const tabGridEl = document.querySelector('.day-navigation [role="tablist"]');
+
+    function updateKioskDayVisibility() {
+      if (!document.body.classList.contains("kiosk-mode")) {
+        tabs.forEach(t => t.classList.remove("day-tab-hidden"));
+        if (tabGridEl) tabGridEl.style.gridTemplateColumns = "";
+        return;
+      }
+      const now = getChicagoNow();
+      const todayNum = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+      const dayIds = Object.keys(DAY_DATES);
+      const isPast = id => {
+        const [y, m, d] = DAY_DATES[id].split("-").map(Number);
+        return (y * 10000 + m * 100 + d) < todayNum;
+      };
+      const pastIds = dayIds.filter(isPast);
+      // Never hide every tab (e.g. once the event is fully over) — keep the last day up.
+      const toHide = pastIds.length === dayIds.length ? pastIds.slice(0, -1) : pastIds;
+
+      tabs.forEach(t => t.classList.toggle("day-tab-hidden", toHide.includes(t.id)));
+
+      if (tabGridEl) {
+        const visibleCount = tabs.filter(t => !t.classList.contains("day-tab-hidden")).length;
+        tabGridEl.style.gridTemplateColumns = `repeat(${Math.max(visibleCount, 1)}, 1fr)`;
+      }
+
+      // If the currently active tab just got hidden, jump to the first visible one.
+      const activeTab = tabs.find(t => t.getAttribute("aria-selected") === "true");
+      if (activeTab && activeTab.classList.contains("day-tab-hidden")) {
+        const nextVisible = tabs.find(t => !t.classList.contains("day-tab-hidden"));
+        if (nextVisible) selectDay(nextVisible, { skipHash: true });
+      }
+    }
+    updateKioskDayVisibility();
+    setInterval(updateKioskDayVisibility, 60000);
+    // Also re-run the instant the mode-toggle button switches kiosk on/off.
+    window.__sewerExpoUpdateKioskDayVisibility = updateKioskDayVisibility;
 
     // --- Persistent header clock, kiosk-mode only (CSS-hidden otherwise) ---
     function updateKioskClock() {
