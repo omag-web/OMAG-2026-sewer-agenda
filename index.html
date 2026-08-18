@@ -174,20 +174,20 @@
 
     /* Live Now / Up Next strip, sticky at the very top in kiosk mode */
     .now-next-strip{display:none}
-    body.kiosk-mode .now-next-strip{display:flex;align-items:center;gap:1.75rem;position:sticky;top:0;z-index:40;background:#17231d;margin-left:-3.5vw;margin-right:-3.5vw;padding:.85rem 3.5vw;min-height:60px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
-    body.kiosk-mode .now-next-strip .nn-stack{display:flex;flex-direction:column;gap:.5rem;min-width:0;flex:1}
-    body.kiosk-mode .now-next-strip .nn-item{display:flex;align-items:flex-start;gap:.75rem;min-width:0}
+    body.kiosk-mode .now-next-strip{display:flex;align-items:center;gap:1.75rem;position:sticky;top:0;z-index:40;background:#17231d;margin-left:-3.5vw;margin-right:-3.5vw;padding:.5rem 3.5vw;min-height:42px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+    body.kiosk-mode .now-next-strip .nn-stack{display:flex;flex-direction:row;align-items:flex-start;justify-content:space-between;gap:1.5rem;min-width:0;flex:1}
+    body.kiosk-mode .now-next-strip .nn-item{display:flex;align-items:flex-start;gap:.75rem;min-width:0;max-width:47%}
     body.kiosk-mode .now-next-strip .nn-body{display:flex;flex-direction:column;gap:.4rem;min-width:0;flex:1;padding-top:.15rem}
-    body.kiosk-mode .now-next-strip .nn-label{flex-shrink:0;font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;padding:.3rem .7rem;border-radius:999px;color:#17231d;background:#fff}
+    body.kiosk-mode .now-next-strip .nn-label{flex-shrink:0;font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:.66rem;padding:.22rem .55rem;border-radius:999px;color:#17231d;background:#fff}
     body.kiosk-mode .now-next-strip .nn-current .nn-label{background:#e11d1d;color:#fff}
     body.kiosk-mode .now-next-strip .nn-upcoming .nn-label{background:var(--orange);color:#fff}
-    body.kiosk-mode .now-next-strip .nn-text{color:#fff;font-size:1.05rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    body.kiosk-mode .now-next-strip .nn-text{color:#fff;font-size:.88rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     body.kiosk-mode .now-next-strip .nn-muted{color:rgba(255,255,255,.55);font-weight:500}
     body.kiosk-mode .now-next-strip .nn-text.nn-clickable{cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.5px}
     body.kiosk-mode .now-next-strip .nn-text.nn-clickable:hover,
     body.kiosk-mode .now-next-strip .nn-text.nn-clickable:active{opacity:.8}
     /* Multi-session summary: "N sessions now", tap to expand/collapse the list */
-    body.kiosk-mode .now-next-strip .nn-summary-btn{display:inline-flex;align-items:center;gap:.4rem;background:none;border:none;padding:0;color:#fff;font-size:1.05rem;font-weight:600;cursor:pointer;text-align:left;white-space:nowrap}
+    body.kiosk-mode .now-next-strip .nn-summary-btn{display:inline-flex;align-items:center;gap:.4rem;background:none;border:none;padding:0;color:#fff;font-size:.88rem;font-weight:600;cursor:pointer;text-align:left;white-space:nowrap}
     body.kiosk-mode .now-next-strip .nn-summary-btn:hover,
     body.kiosk-mode .now-next-strip .nn-summary-btn:active{opacity:.85}
     body.kiosk-mode .now-next-strip .nn-chevron{font-size:.7rem;transition:transform .15s ease}
@@ -251,7 +251,7 @@
   })();
   </script>
   <button type="button" id="mode-toggle-btn" aria-label="Switch display mode">Auto display mode</button>
-  <div id="qr-panel"><button type="button" id="qr-toggle-btn" class="qr-toggle-btn" aria-label="Minimize QR code">–</button><img id="qr-code-img" src="https://raw.githubusercontent.com/MBurlesonOMAG/OMAG-2026-sewer-agenda/main/images/LINK%20QR%20-%20Agenda.jpg" alt="QR code linking to this agenda" width="140" height="140"><span id="qr-caption" class="qr-caption">Scan for the agenda on your phone</span></div>
+  <div id="qr-panel"><button type="button" id="qr-toggle-btn" class="qr-toggle-btn" aria-label="Minimize QR code">–</button><img id="qr-code-img" src="https://raw.githubusercontent.com/MBurlesonOMAG/OMAG-2026-sewer-agenda/main/images/LINK%20QR%20-%20Agenda.jpg" alt="QR code linking to this agenda" width="140" height="140"><span id="qr-caption" class="qr-caption">Scan to view the agenda on your phone</span></div>
   <div class="app-wrapper w-full">
     <header class="w-full px-5 py-7 sm:px-8" style="background:#000;">
       <div class="mx-auto flex max-w-6xl flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
@@ -1328,8 +1328,8 @@
       const caption = document.getElementById("qr-caption");
       if (!panel || !toggleBtn || !caption) return;
       const STORAGE_KEY = "sewerExpoQrMinimized";
-      const FULL_TEXT = "Scan for the agenda on your phone";
-      const SHORT_TEXT = "Scan for agenda";
+      const FULL_TEXT = "Scan to view the agenda on your phone";
+      const SHORT_TEXT = "Scan to view agenda";
 
       function getSavedMinimized() {
         try { return localStorage.getItem(STORAGE_KEY) === "1"; } catch (e) { return false; }
