@@ -133,11 +133,11 @@
     body.kiosk-mode header h1{font-size:64px!important}
     body.kiosk-mode header p{font-size:24px!important}
     body.kiosk-mode #agenda-heading{font-size:52px!important}
-    body.kiosk-mode .mb-8.grid{gap:1.5rem}
+    body.kiosk-mode .mb-8.grid{gap:1.5rem;margin-top:2rem}
     body.kiosk-mode .mb-8.grid > div{padding:1.75rem}
     body.kiosk-mode .mb-8.grid .text-xs{font-size:.95rem}
     body.kiosk-mode .mb-8.grid .text-sm{font-size:1.15rem}
-    body.kiosk-mode .mb-8.grid .activity-pill{font-size:1rem;padding:.5rem 1rem}
+    body.kiosk-mode .mb-8.grid .activity-pill{font-size:.78rem;padding:.35rem .75rem}
     body.kiosk-mode .day-tab{padding:1.4rem 1rem;font-size:1.6rem;border-radius:1rem}
     body.kiosk-mode .day-status{font-size:1.15rem}
     body.kiosk-mode .day-status svg{width:1.4rem;height:1.4rem}
@@ -172,7 +172,8 @@
 
     /* Live Now / Up Next strip, sticky at the very top in kiosk mode */
     .now-next-strip{display:none}
-    body.kiosk-mode .now-next-strip{display:flex;flex-wrap:wrap;gap:2rem;align-items:center;position:sticky;top:0;z-index:40;background:#17231d;margin-left:-3.5vw;margin-right:-3.5vw;padding:.85rem 3.5vw;min-height:60px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+    body.kiosk-mode .now-next-strip{display:flex;align-items:center;gap:1.75rem;position:sticky;top:0;z-index:40;background:#17231d;margin-left:-3.5vw;margin-right:-3.5vw;padding:.85rem 3.5vw;min-height:60px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+    body.kiosk-mode .now-next-strip .nn-stack{display:flex;flex-direction:column;gap:.5rem;min-width:0;flex:1}
     body.kiosk-mode .now-next-strip .nn-item{display:flex;align-items:center;gap:.75rem;min-width:0}
     body.kiosk-mode .now-next-strip .nn-label{flex-shrink:0;font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;padding:.3rem .7rem;border-radius:999px;color:#17231d;background:#fff}
     body.kiosk-mode .now-next-strip .nn-current .nn-label{background:#e11d1d;color:#fff}
@@ -191,7 +192,7 @@
     /* QR code lives inside the sticky strip itself (not floated/fixed),
        so it can never overlap scrolling page content underneath */
     #qr-panel{display:none}
-    body.kiosk-mode .now-next-strip #qr-panel{display:flex;align-items:center;gap:.6rem;margin-left:auto;flex-shrink:0}
+    body.kiosk-mode .now-next-strip #qr-panel{display:flex;align-items:center;gap:.6rem;margin-left:auto;align-self:center;flex-shrink:0}
     body.kiosk-mode .now-next-strip #qr-panel img{width:44px;height:44px;object-fit:contain;border-radius:4px;background:#fff;padding:2px;flex-shrink:0}
     body.kiosk-mode .now-next-strip #qr-panel span{color:rgba(255,255,255,.85);font-size:.78rem;font-weight:600;line-height:1.2;max-width:90px}
 
@@ -243,8 +244,10 @@
 
     <main class="mx-auto w-full max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
       <div id="now-next-strip" class="now-next-strip" aria-live="polite">
-        <span class="nn-item nn-current"><span class="nn-label">Now</span><span class="nn-text nn-muted">—</span></span>
-        <span class="nn-item nn-upcoming"><span class="nn-label">Next</span><span class="nn-text nn-muted">—</span></span>
+        <div class="nn-stack">
+          <span class="nn-item nn-current"><span class="nn-label">Now</span><span class="nn-text nn-muted">—</span></span>
+          <span class="nn-item nn-upcoming"><span class="nn-label">Next</span><span class="nn-text nn-muted">—</span></span>
+        </div>
         <div id="qr-panel"><img id="qr-code-img" src="https://raw.githubusercontent.com/MBurlesonOMAG/OMAG-2026-sewer-agenda/main/images/LINK%20QR%20-%20Agenda.jpg" alt="QR code linking to this agenda" width="44" height="44"><span>Scan for the agenda on your phone</span></div>
       </div>
       <section aria-labelledby="agenda-heading">
