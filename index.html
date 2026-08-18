@@ -180,7 +180,7 @@
     body.kiosk-mode .now-next-strip .nn-text{color:#fff;font-size:1.05rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     body.kiosk-mode .now-next-strip .nn-muted{color:rgba(255,255,255,.55);font-weight:500}
     /* Day nav sits right below the strip instead of overlapping it */
-    body.kiosk-mode .day-navigation{top:60px}
+    body.kiosk-mode .day-navigation{top:var(--nn-strip-h, 60px)}
 
     /* Persistent clock in the header, kiosk-only */
     .kiosk-clock-only{display:none}
@@ -884,6 +884,23 @@
         selectDay(tabs[next]);
       });
     });
+
+    // --- Keep the day-nav's sticky offset synced to the strip's *actual*
+    // height, since it can wrap to multiple lines (long session titles, the
+    // QR thumbnail, a narrower kiosk width) and a hardcoded px value would
+    // leave the day tabs partially hidden underneath it ---
+    const nnStripEl = document.getElementById("now-next-strip");
+    function syncStripHeight() {
+      if (!nnStripEl) return;
+      const h = nnStripEl.getBoundingClientRect().height;
+      if (h > 0) document.documentElement.style.setProperty("--nn-strip-h", h + "px");
+    }
+    if (nnStripEl && "ResizeObserver" in window) {
+      new ResizeObserver(syncStripHeight).observe(nnStripEl);
+    } else {
+      window.addEventListener("resize", syncStripHeight);
+    }
+    syncStripHeight();
 
     // --- Sticky nav shadow once it's actually stuck to the top ---
     const nav = document.querySelector(".day-navigation");
