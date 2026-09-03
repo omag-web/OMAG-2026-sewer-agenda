@@ -359,7 +359,7 @@
               <p class="time-label font-bold" style="color:#17231d;font-size:16px;" data-start="2026-10-12T16:00:00" data-end="2026-10-12T19:30:00">4:00 PM–7:30 PM</p>
               <div class="session-grid">
                 <details class="session-card"><summary>
-                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Networking / Special Event</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Cornhole Tournament</span><span class="mt-1 block" style="color:#5d675f;">Stride Bank Center</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
+                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Networking / Special Event</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Cornhole Tournament</span><span class="mt-1 block" style="color:#5d675f;">Stride Bank Center</span><span class="sponsor-row mt-2"><span class="sponsor-label">Sponsored by:</span><img id="cornhole-sponsor-logo-img" src="https://raw.githubusercontent.com/MBurlesonOMAG/OMAG-2026-sewer-agenda/main/images/BMS%20CAT.png" alt="BMS CAT logo"></span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">Sewer Expo cornhole tournament and networking event.</p></div>
                 </details>
@@ -543,7 +543,7 @@
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-13T18:00:00" data-end="2026-10-13T21:00:00">6:00 PM–9:00 PM</p>
               <div class="session-grid">
                 <details class="session-card"><summary>
-                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Networking / Special Event</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Casino Night Sponsored By RCH</span><span class="mt-1 block" style="color:#5d675f;">Stride Bank Center - Vendor hall</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
+                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Networking / Special Event</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Casino Night</span><span class="mt-1 block" style="color:#5d675f;">Stride Bank Center - Vendor hall</span><span class="sponsor-row mt-2"><span class="sponsor-label">Sponsored by:</span><img id="casino-sponsor-logo-img" src="https://raw.githubusercontent.com/MBurlesonOMAG/OMAG-2026-sewer-agenda/main/images/RCHlogonew.png" alt="RCH logo"></span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">Evening networking and entertainment event for Sewer Expo attendees.</p></div>
                 </details>
@@ -1328,6 +1328,30 @@
         const div = document.createElement("div");
         div.className = "sponsor-placeholder";
         div.textContent = "ITpipes logo";
+        img.replaceWith(div);
+      }, { once: true });
+    })();
+    (function () {
+      const img = document.getElementById("cornhole-sponsor-logo-img");
+      if (!img) return;
+      img.addEventListener("error", () => {
+        const row = img.closest(".sponsor-row");
+        if (!row) return;
+        const div = document.createElement("div");
+        div.className = "sponsor-placeholder";
+        div.textContent = "BMS CAT logo";
+        img.replaceWith(div);
+      }, { once: true });
+    })();
+    (function () {
+      const img = document.getElementById("casino-sponsor-logo-img");
+      if (!img) return;
+      img.addEventListener("error", () => {
+        const row = img.closest(".sponsor-row");
+        if (!row) return;
+        const div = document.createElement("div");
+        div.className = "sponsor-placeholder";
+        div.textContent = "RCH logo";
         img.replaceWith(div);
       }, { once: true });
     })();
