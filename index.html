@@ -70,10 +70,10 @@
     .day-status{display:inline-flex;align-items:center;gap:.45rem;color:var(--muted)}
     .logo-placeholder{display:flex;align-items:center;justify-content:center;height:60px;width:160px;border:1px dashed rgba(255,255,255,.4);border-radius:8px;color:rgba(255,255,255,.7);font-size:.7rem;text-align:center;padding:.25rem}
     .speaker-placeholder{display:flex;align-items:center;justify-content:center;height:8rem;width:8rem;border-radius:.75rem;background:#e8eee9;color:var(--muted);font-size:.7rem;text-align:center;padding:.5rem;flex-shrink:0}
-    .sponsor-row{display:flex;align-items:center;gap:.65rem;margin-bottom:.85rem}
-    .sponsor-row img{height:2.25rem;width:auto;max-width:150px;object-fit:contain;flex-shrink:0}
-    .sponsor-row .sponsor-placeholder{display:flex;align-items:center;justify-content:center;height:2.25rem;padding:0 .6rem;border-radius:.4rem;background:#e8eee9;color:var(--muted);font-size:.65rem;text-align:center}
-    .sponsor-label{font-size:.78rem;font-weight:600;color:var(--muted)}
+    .sponsor-row{display:flex;align-items:center;gap:.5rem}
+    .sponsor-row img{height:1.4rem;width:auto;max-width:120px;object-fit:contain;flex-shrink:0}
+    .sponsor-row .sponsor-placeholder{display:flex;align-items:center;justify-content:center;height:1.4rem;padding:0 .5rem;border-radius:.35rem;background:#e8eee9;color:var(--muted);font-size:.62rem;text-align:center}
+    .sponsor-label{font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 
     /* Sticky day tabs: stays pinned to the top of the viewport once scrolled past */
     .day-navigation{position:sticky;top:0;z-index:30;background:rgb(238,240,237);padding:.65rem 0;margin-left:-5px;margin-right:-5px;padding-left:5px;padding-right:5px}
@@ -571,13 +571,9 @@
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-14T07:00:00" data-end="2026-10-14T08:00:00">7:00 AM–8:00 AM</p>
               <div class="session-grid">
                 <details class="session-card" data-tracks="ML"><summary>
-                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Breakfast / Leadership Networking</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="block font-bold" style="color:#17231d;font-size:20px;">City Manager and Public Works Director Breakfast</span><span class="mt-1 block" style="color:#5d675f;">William Sheppard, Hunter Askew, and Sean McKelvey · 2nd/4th Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
+                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Breakfast / Leadership Networking</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="block font-bold" style="color:#17231d;font-size:20px;">City Manager and Public Works Director Breakfast</span><span class="mt-1 block" style="color:#5d675f;">William Sheppard, Hunter Askew, and Sean McKelvey · 2nd/4th Floor</span><span class="sponsor-row mt-2"><span class="sponsor-label">Sponsored by:</span><img id="breakfast-sponsor-logo-img" src="https://raw.githubusercontent.com/MBurlesonOMAG/OMAG-2026-sewer-agenda/main/images/ITpipes%20Logo%20H%20Pos%20A%20PMS%20Navy%20blue%20copy%20%282%29.png" alt="ITpipes logo"></span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail">
-                    <div class="sponsor-row">
-                      <img id="breakfast-sponsor-logo-img" src="https://raw.githubusercontent.com/MBurlesonOMAG/OMAG-2026-sewer-agenda/main/images/ITpipes%20Logo%20H%20Pos%20A%20PMS%20Navy%20blue%20copy%20%282%29.png" alt="ITpipes logo">
-                      <span class="sponsor-label">Sponsored by ITpipes</span>
-                    </div>
                     <p class="leading-relaxed" style="color:#5d675f;">Join public works directors, city managers, administrators, and other municipal leaders for a networking breakfast focused on emerging trends, shared challenges, and innovative ideas. Connect with peers, exchange best practices, and discover strategies to help Oklahoma cities and towns succeed.</p>
                   </div>
                 </details>
