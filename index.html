@@ -70,6 +70,10 @@
     .day-status{display:inline-flex;align-items:center;gap:.45rem;color:var(--muted)}
     .logo-placeholder{display:flex;align-items:center;justify-content:center;height:60px;width:160px;border:1px dashed rgba(255,255,255,.4);border-radius:8px;color:rgba(255,255,255,.7);font-size:.7rem;text-align:center;padding:.25rem}
     .speaker-placeholder{display:flex;align-items:center;justify-content:center;height:8rem;width:8rem;border-radius:.75rem;background:#e8eee9;color:var(--muted);font-size:.7rem;text-align:center;padding:.5rem;flex-shrink:0}
+    .sponsor-row{display:flex;align-items:center;gap:.65rem;margin-bottom:.85rem}
+    .sponsor-row img{height:2.25rem;width:auto;max-width:150px;object-fit:contain;flex-shrink:0}
+    .sponsor-row .sponsor-placeholder{display:flex;align-items:center;justify-content:center;height:2.25rem;padding:0 .6rem;border-radius:.4rem;background:#e8eee9;color:var(--muted);font-size:.65rem;text-align:center}
+    .sponsor-label{font-size:.78rem;font-weight:600;color:var(--muted)}
 
     /* Sticky day tabs: stays pinned to the top of the viewport once scrolled past */
     .day-navigation{position:sticky;top:0;z-index:30;background:rgb(238,240,237);padding:.65rem 0;margin-left:-5px;margin-right:-5px;padding-left:5px;padding-right:5px}
@@ -569,7 +573,13 @@
                 <details class="session-card" data-tracks="ML"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Breakfast / Leadership Networking</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="block font-bold" style="color:#17231d;font-size:20px;">City Manager and Public Works Director Breakfast</span><span class="mt-1 block" style="color:#5d675f;">William Sheppard, Hunter Askew, and Sean McKelvey · 2nd/4th Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
-                  <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">Join public works directors, city managers, administrators, and other municipal leaders for a networking breakfast focused on emerging trends, shared challenges, and innovative ideas. Connect with peers, exchange best practices, and discover strategies to help Oklahoma cities and towns succeed.</p></div>
+                  <div class="session-detail">
+                    <div class="sponsor-row">
+                      <img id="breakfast-sponsor-logo-img" src="https://raw.githubusercontent.com/MBurlesonOMAG/OMAG-2026-sewer-agenda/main/images/ITpipes%20Logo%20H%20Pos%20A%20PMS%20Navy%20blue%20copy%20%282%29.png" alt="ITpipes logo">
+                      <span class="sponsor-label">Sponsored by ITpipes</span>
+                    </div>
+                    <p class="leading-relaxed" style="color:#5d675f;">Join public works directors, city managers, administrators, and other municipal leaders for a networking breakfast focused on emerging trends, shared challenges, and innovative ideas. Connect with peers, exchange best practices, and discover strategies to help Oklahoma cities and towns succeed.</p>
+                  </div>
                 </details>
               </div>
             </div>
@@ -657,7 +667,7 @@
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-14T12:45:00" data-end="2026-10-14T13:35:00">12:45 PM–1:35 PM</p>
               <div class="session-grid">
                 <details class="session-card" data-tracks="FO ML UM"><summary>
-                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:#000;color:#fff;">Vendor Demo</span><span class="block"><span class="activity-pill" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="activity-pill ml-1" style="background:rgb(239,108,34);color:#fff;">FO</span></span><span class="block font-bold" style="color:#17231d;font-size:20px;">Work Smarter Underground: How AI Is Changing the Future of Sewer Inspection</span><span class="mt-1 block" style="color:#5d675f;">Itpipe · Vendor Hall</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
+                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:#000;color:#fff;">Vendor Demo</span><span class="block"><span class="activity-pill" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="activity-pill ml-1" style="background:rgb(239,108,34);color:#fff;">FO</span></span><span class="block font-bold" style="color:#17231d;font-size:20px;">Work Smarter Underground: How AI Is Changing the Future of Sewer Inspection</span><span class="mt-1 block" style="color:#5d675f;">ITpipes · Vendor Hall</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">As municipalities navigate aging infrastructure, tightening budgets, and growing regulatory pressures, artificial intelligence is emerging as a transformative tool for sewer condition assessment. This presentation explores how AI streamlines defect recognition, improves coding accuracy, and accelerates decision-making while preserving the critical role of human oversight. Attendees will leave with practical insight into how AI integration can help their organization shift from reactive to proactive infrastructure management and maximize the value of every inspection.</p></div>
                 </details>
@@ -1313,6 +1323,18 @@
     attachImgFallback("header-logo-img", "logo-placeholder", "OMAG Sewer Expo logo");
     attachImgFallback("footer-logo-img", "logo-placeholder", "OMAG Sewer Expo logo");
     attachImgFallback("keynote-photo-img", "speaker-placeholder", "Leo Flowers headshot");
+    (function () {
+      const img = document.getElementById("breakfast-sponsor-logo-img");
+      if (!img) return;
+      img.addEventListener("error", () => {
+        const row = img.closest(".sponsor-row");
+        if (!row) return;
+        const div = document.createElement("div");
+        div.className = "sponsor-placeholder";
+        div.textContent = "ITpipes logo";
+        img.replaceWith(div);
+      }, { once: true });
+    })();
     const qrImg = document.getElementById("qr-code-img");
     if (qrImg) {
       qrImg.addEventListener("error", () => {
@@ -1354,7 +1376,22 @@
     })();
 
     refreshFilters();
-    lucide.createIcons();
+    if (window.lucide && typeof lucide.createIcons === "function") {
+      lucide.createIcons();
+    } else {
+      // Icon script hasn't loaded yet (slow network / blocked CDN) — retry
+      // briefly instead of throwing, so the rest of the page still works.
+      let attempts = 0;
+      const retry = setInterval(() => {
+        attempts++;
+        if (window.lucide && typeof lucide.createIcons === "function") {
+          lucide.createIcons();
+          clearInterval(retry);
+        } else if (attempts >= 10) {
+          clearInterval(retry); // give up quietly; icons just won't render
+        }
+      }, 300);
+    }
   });
   </script>
 </body>
