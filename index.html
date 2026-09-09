@@ -1772,6 +1772,20 @@
       });
     })();
 
+    // --- Accordion behavior for the Sponsors & Vendors tab only: opening one
+    // sponsor card closes any other sponsor card left open, so the long list
+    // doesn't get unwieldy. Agenda session cards (Mon/Tue/Wed) are untouched,
+    // since Expand All / Collapse All there is meant to show several at once.
+    const sponsorCards = [...document.querySelectorAll("#sponsors-panel details.session-card")];
+    sponsorCards.forEach(card => {
+      card.addEventListener("toggle", () => {
+        if (!card.open) return;
+        sponsorCards.forEach(other => {
+          if (other !== card && other.open) other.open = false;
+        });
+      });
+    });
+
     refreshFilters();
     if (window.lucide && typeof lucide.createIcons === "function") {
       lucide.createIcons();
