@@ -60,7 +60,7 @@
     .session-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:.8rem;align-items:start}
     .session-card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--paper);box-shadow:0 5px 16px rgba(23,35,29,.05);transition:.18s ease}
     .session-card:hover{transform:translateY(-1px);box-shadow:0 9px 24px rgba(23,35,29,.08)}
-    .session-card summary{list-style:none;cursor:pointer;padding:1rem 1.1rem}
+    .session-card summary{position:relative;list-style:none;cursor:pointer;padding:1rem 1.1rem}
     .session-card summary::-webkit-details-marker{display:none}
     .session-card summary:hover,.session-card[open] summary{background:#fff}
     .session-card[open] .chevron{transform:rotate(180deg)}
@@ -1667,6 +1667,19 @@
     }
     document.getElementById("expand-all-btn").addEventListener("click", () => toggleAllInVisibleDay(true));
     document.getElementById("collapse-all-btn").addEventListener("click", () => toggleAllInVisibleDay(false));
+
+    // --- Sponsors & Vendors: accordion behavior — opening one card closes any others ---
+    const sponsorsPanelEl = document.getElementById("sponsors-panel");
+    if (sponsorsPanelEl) {
+      sponsorsPanelEl.querySelectorAll("details.session-card").forEach(card => {
+        card.addEventListener("toggle", () => {
+          if (!card.open) return;
+          sponsorsPanelEl.querySelectorAll("details.session-card[open]").forEach(other => {
+            if (other !== card) other.open = false;
+          });
+        });
+      });
+    }
 
     // --- Add-to-calendar (.ics) buttons on every session card ---
     function pad(n) { return String(n).padStart(2, "0"); }
