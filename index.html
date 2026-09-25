@@ -87,9 +87,9 @@
 
     /* Track filter chips */
     .track-filters{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem}
-    .track-chip{border:1.5px solid var(--line);background:#fff;color:var(--ink);font-weight:700;font-size:.8rem;padding:.4rem .9rem;border-radius:999px;cursor:pointer;transition:.15s ease}
-    .track-chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
-    .track-chip:hover{transform:translateY(-1px)}
+    .track-chip,.floor-chip{border:1.5px solid var(--line);background:#fff;color:var(--ink);font-weight:700;font-size:.8rem;padding:.4rem .9rem;border-radius:999px;cursor:pointer;transition:.15s ease}
+    .track-chip[aria-pressed="true"],.floor-chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+    .track-chip:hover,.floor-chip:hover{transform:translateY(-1px)}
 
     /* Happening-now highlight */
     .time-group.is-now .time-label:before{background:#e11d1d;box-shadow:0 0 0 4px rgba(225,29,29,.18)}
@@ -153,9 +153,9 @@
     body.kiosk-mode .day-tab-hidden{display:none}
     body.kiosk-mode .day-status{font-size:1.15rem}
     body.kiosk-mode .day-status svg{width:1.4rem;height:1.4rem}
-    body.kiosk-mode .track-chip{font-size:1.15rem;padding:.75rem 1.4rem;min-height:56px}
+    body.kiosk-mode .track-chip,body.kiosk-mode .floor-chip{font-size:1.15rem;padding:.75rem 1.4rem;min-height:56px}
     body.kiosk-mode .toolbar-btn{font-size:1.15rem;padding:.75rem 1.4rem;min-height:56px}
-    body.kiosk-mode .toolbar-btn svg,body.kiosk-mode .track-chip svg{width:1.2rem;height:1.2rem}
+    body.kiosk-mode .toolbar-btn svg,body.kiosk-mode .track-chip svg,body.kiosk-mode .floor-chip svg{width:1.2rem;height:1.2rem}
     body.kiosk-mode section#monday-panel h2,
     body.kiosk-mode section#tuesday-panel h2,
     body.kiosk-mode section#wednesday-panel h2{font-size:44px!important}
@@ -337,9 +337,13 @@
           <button type="button" class="track-chip" data-track="FO" aria-pressed="false">FO - Field Operations</button>
         </div>
 
-        <div class="day-toolbar mb-6 flex flex-wrap gap-2">
-          <button type="button" id="expand-all-btn" class="toolbar-btn"><i data-lucide="maximize-2" class="h-3.5 w-3.5"></i><span>Expand all</span></button>
-          <button type="button" id="collapse-all-btn" class="toolbar-btn"><i data-lucide="minimize-2" class="h-3.5 w-3.5"></i><span>Collapse all</span></button>
+        <div class="track-filters mb-6" role="group" aria-label="Filter sessions by floor">
+          <button type="button" class="floor-chip" data-floor="all" aria-pressed="true">All Floors</button>
+          <button type="button" class="floor-chip" data-floor="1st" aria-pressed="false">1st Floor</button>
+          <button type="button" class="floor-chip" data-floor="2nd" aria-pressed="false">2nd Floor</button>
+          <button type="button" class="floor-chip" data-floor="4th" aria-pressed="false">4th Floor</button>
+          <button type="button" class="floor-chip" data-floor="vh" aria-pressed="false">Vendor Hall</button>
+          <button type="button" class="floor-chip" data-floor="outside" aria-pressed="false">Outside</button>
         </div>
 
         <section id="monday-panel" class="day-panel" role="tabpanel" aria-labelledby="monday-tab">
@@ -350,7 +354,7 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:16px;" data-start="2026-10-12T07:00:00" data-end="2026-10-12T09:30:00">7:00 AM–9:30 AM</p>
               <div class="session-grid">
-                <details class="session-card"><summary>
+                <details class="session-card" data-floor="vh"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:#000;color:#fff;">Setup</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Heavy Equipment Move-In</span><span class="mt-1 block" style="color:#5d675f;">Vendor Hall</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">Heavy equipment arrival and placement in preparation for the Expo.</p></div>
@@ -360,7 +364,7 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:16px;" data-start="2026-10-12T07:30:00" data-end="2026-10-12T18:30:00">7:30 AM–6:30 PM</p>
               <div class="session-grid">
-                <details class="session-card"><summary>
+                <details class="session-card" data-floor="vh"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:#000;color:#fff;">Setup</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Vendor Hall Setup</span><span class="mt-1 block" style="color:#5d675f;">Vendor Hall</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">Vendor registration, booth setup, equipment placement, and preparation of the Vendor Hall.</p></div>
@@ -408,7 +412,7 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-13T08:00:00" data-end="2026-10-13T08:15:00">8:00 AM–8:15 AM</p>
               <div class="session-grid">
-                <details class="session-card"><summary>
+                <details class="session-card" data-floor="1st"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Priority Session</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Welcome, Introduction, and DEQ Credit Information</span><span class="mt-1 block" style="color:#5d675f;">William Sheppard · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">Opening remarks and information about receiving and documenting DEQ credits.</p></div>
@@ -418,7 +422,7 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-13T08:15:00" data-end="2026-10-13T09:05:00">8:15 AM–9:05 AM</p>
               <div class="session-grid">
-                <details class="session-card" open><summary>
+                <details class="session-card" open data-floor="1st"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Priority Session</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Keynote Address</span><span class="mt-1 block" style="color:#5d675f;">Leo Flowers · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail">
@@ -433,7 +437,7 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-13T09:05:00" data-end="2026-10-13T09:15:00">9:05 AM–9:15 AM</p>
               <div class="session-grid">
-                <details class="session-card"><summary>
+                <details class="session-card" data-floor="1st"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Priority Session</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Awards</span><span class="mt-1 block" style="color:#5d675f;">1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">The OMAG Sanitary Sewer System of the Year Award recognizes an Oklahoma city or town that has demonstrated exceptional dedication to maintaining and improving its sanitary sewer system through outstanding service, proactive maintenance, and operational excellence.</p></div>
@@ -454,12 +458,12 @@
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-13T09:45:00" data-end="2026-10-13T10:35:00">9:45 AM–10:35 AM</p>
               <span class="activity-pill mb-3" style="background:rgb(255,49,49);color:#fff;font-size:14px;">Bonus sessions for the 12-hour DEQ credit track.</span>
               <div class="session-grid">
-                <details class="session-card" data-tracks="ML UM"><summary>
+                <details class="session-card" data-tracks="ML UM" data-floor="2nd"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Navigating Infrastructure Funding: A Comprehensive Overview of Financing Options for Public Utilities</span><span class="mt-1 block" style="color:#5d675f;">Charles de Coune and Jared Cooper · 2nd Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">An overview of funding opportunities available to public utilities, including general obligation bonds, revenue bonds, public-private partnerships, tax increment financing, government loans, direct bank loans, BUILD Act funding, and other financing options.</p></div>
                 </details>
-                <details class="session-card" data-tracks="FO"><summary>
+                <details class="session-card" data-tracks="FO" data-floor="4th"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(239,108,34);color:#fff;">FO</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Condition-Based Maintenance for Sanitary Sewer Systems: Why Clean a Clean Sewer Line?</span><span class="mt-1 block" style="color:#5d675f;">Walt Woodard · 4th Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will introduce an acoustic inspection device used to quickly assess sanitary sewer lines. Attendees will learn how the technology works, how it supports sewer system evaluation, and how a complete inspection can be performed in approximately 80 seconds.</p></div>
@@ -469,7 +473,7 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-13T10:20:00" data-end="2026-10-13T10:40:00">10:20 AM–10:40 AM</p>
               <div class="session-grid">
-                <details class="session-card"><summary>
+                <details class="session-card" data-floor="1st"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Priority Session</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Questions All Public Works Should Know</span><span class="mt-1 block" style="color:#5d675f;">Hunter Askew · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">Description to be provided.</p></div>
@@ -479,8 +483,8 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-13T10:40:00" data-end="2026-10-13T11:30:00">10:40 AM–11:30 AM</p>
               <div class="session-grid">
-                <details class="session-card"><summary>
-                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Priority Session</span><span class="block font-bold" style="color:#17231d;font-size:20px;">OMAG: Prepare for the Fight</span><span class="mt-1 block" style="color:#5d675f;">Sean McKelvey · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
+                <details class="session-card" data-floor="1st"><summary>
+                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Priority Session</span><span class="block font-bold" style="color:#17231d;font-size:20px;">OMAG: Prepare for the Fight</span><span class="mt-1 block" style="color:#5d675f;">Sean McKelvey and Kyle Waid · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will provide practical strategies for preparing witnesses and navigating testimony and depositions. Attendees will learn how to avoid common mistakes, approach high-pressure situations with confidence, and present information clearly and effectively.</p></div>
                 </details>
@@ -499,22 +503,22 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-13T12:45:00" data-end="2026-10-13T13:35:00">12:45 PM–1:35 PM</p>
               <div class="session-grid">
-                <details class="session-card" data-tracks="FO ML UM"><summary>
+                <details class="session-card" data-tracks="FO ML UM" data-floor="vh"><summary>
                   <div class="flex items-start justify-between gap-4"><span style="min-width:0;"><span class="activity-pill" style="background:#000;color:#fff;">Vendor Demo</span><span class="block"><span class="activity-pill" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="activity-pill ml-1" style="background:rgb(239,108,34);color:#fff;">FO</span></span><span class="block font-bold" style="color:#17231d;font-size:20px;">CIPP Demonstration</span><span class="mt-1 block" style="color:#5d675f;">Vortex Companies · Vendor Hall</span></span><span class="sponsor-row" style="margin-left:auto;align-self:center;"><img id="cipp-vendor-logo-img" src="images/sponsors/Vortex_Companies_4C%20%282%29.jpg" alt="Vortex Companies logo" data-fallback="Vortex Companies" onerror="sponsorLogoFallback(this)"></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This live demonstration will introduce trenchless pipe rehabilitation methods with a focus on Cured-in-Place Pipe (CIPP) point repairs. Attendees will learn how the repair process works, where it can be applied, and how it can help municipalities address damaged sewer infrastructure with minimal disruption.</p></div>
                 </details>
-                <details class="session-card" data-tracks="FO ML UM"><summary>
+                <details class="session-card" data-tracks="FO ML UM" data-floor="outside"><summary>
                   <div class="flex items-start justify-between gap-4"><span style="min-width:0;"><span class="activity-pill" style="background:#000;color:#fff;">Vendor Demo</span><span class="block"><span class="activity-pill" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="activity-pill ml-1" style="background:rgb(239,108,34);color:#fff;">FO</span></span><span class="block font-bold" style="color:#17231d;font-size:20px;">Hydro Excavation Demonstration</span><span class="mt-1 block" style="color:#5d675f;">RCH / Sewer Equipment Company · Outside</span></span><span class="sponsor-row" style="margin-left:auto;align-self:center;"><img id="hydro-vendor-logo-img" src="images/RCHlogonew.png" alt="RCH logo" data-fallback="RCH" onerror="sponsorLogoFallback(this)"></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This live demonstration will introduce hydro excavation technology and its applications in municipal utility work. Attendees will learn how hydro excavation can improve safety, efficiency, and infrastructure management, whether their organization currently owns the equipment or is considering adding it to their operations.</p></div>
                 </details>
-                <details class="session-card" data-tracks="FO UM"><summary>
+                <details class="session-card" data-tracks="FO UM" data-floor="4th"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="activity-pill ml-1" style="background:rgb(239,108,34);color:#fff;">FO</span><span class="block font-bold" style="color:#17231d;font-size:20px;">What Is NASSCO PACP All About?</span><span class="mt-1 block" style="color:#5d675f;">Bryan Ballard · 4th Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will provide an overview of NASSCO, its mission, and the Pipeline Assessment Certification Program (PACP). Attendees will learn about PACP training, inspection applications, data usage, and how certification can benefit sewer system professionals.</p></div>
                 </details>
-                <details class="session-card" data-tracks="ML UM"><summary>
+                <details class="session-card" data-tracks="ML UM" data-floor="2nd"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Your Water System is Under Attack: SCADA Security for Water Operators</span><span class="mt-1 block" style="color:#5d675f;">Steve Montgomery · 2nd Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will explore cybersecurity risks in modern SCADA systems and how those vulnerabilities can affect water and wastewater operations. Attendees will learn about emerging security technologies and practical steps for building short- and long-term strategies to better protect their systems.</p></div>
@@ -534,18 +538,18 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-13T14:20:00" data-end="2026-10-13T15:10:00">2:20 PM–3:10 PM</p>
               <div class="session-grid">
-                <details class="session-card" data-tracks="ML UM"><summary>
+                <details class="session-card" data-tracks="ML UM" data-floor="1st"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="block font-bold" style="color:#17231d;font-size:20px;">The Trouble with Troubleshooting and Predictive Maintenance: Don't Get Caught Without It</span><span class="mt-1 block" style="color:#5d675f;">John Curry · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will explore best management practices for predictive maintenance and the use of data historians in utility operations. Attendees will learn how historical operational data can support maintenance decisions, improve system management, and assist with issues related to tort claims.</p></div>
                 </details>
-                <details class="session-card" data-tracks="FO UM"><summary>
+                <details class="session-card" data-tracks="FO UM" data-floor="2nd"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(239,108,34);color:#fff;">FO</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">How to Create an EPA-Compliant FOG Program</span><span class="mt-1 block" style="color:#5d675f;">Tony Cole · 2nd Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will provide an overview of the steps involved in developing an EPA-compliant FOG program. Attendees will learn about key stakeholders, program requirements, and effective strategies for operating a FOG program and improving compliance rates within their utility.</p></div>
                 </details>
 
-                <details class="session-card" data-tracks="FO UM"><summary>
+                <details class="session-card" data-tracks="FO UM" data-floor="4th"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(239,108,34);color:#fff;">FO</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Principles and Practices of Tracer Wire: Completing the System</span><span class="mt-1 block" style="color:#5d675f;">Andrew Moseley · 4th Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will provide an overview of tracer wire systems and the components needed for reliable utility locating. Attendees will learn about proper installation practices, system components, and how tracer wire supports the accurate location and management of underground utility infrastructure.</p></div>
@@ -555,8 +559,8 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-13T15:20:00" data-end="2026-10-13T16:10:00">3:20 PM–4:10 PM</p>
               <div class="session-grid">
-                <details class="session-card"><summary>
-                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Priority Session</span><span class="block font-bold" style="color:#17231d;font-size:20px;">OMAG Documentation and Response</span><span class="mt-1 block" style="color:#5d675f;">Leslie Noriega, Sean McKelvey, and William Sheppard · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
+                <details class="session-card" data-floor="1st"><summary>
+                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Priority Session</span><span class="block font-bold" style="color:#17231d;font-size:20px;">The Top 10 Ways to Lose a Sewer Claim</span><span class="mt-1 block" style="color:#5d675f;">Leslie Noriega, Sean McKelvey, and William Sheppard · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will explore the top ways municipalities can lose a sewer claim and how to avoid them. Attendees will learn the importance of documenting work orders, inspections, maintenance, response activities, and communication, along with practical strategies to strengthen claims preparedness and defense.</p></div>
                 </details>
@@ -565,7 +569,7 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-13T16:10:00" data-end="2026-10-13T16:30:00">4:10 PM–4:30 PM</p>
               <div class="session-grid">
-                <details class="session-card"><summary>
+                <details class="session-card" data-floor="1st"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="block font-bold" style="color:#17231d;font-size:20px;">Closing Remarks and Raffle Prize Announcements</span><span class="mt-1 block" style="color:#5d675f;">1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">End-of-day announcements, reminders, and the presentation of selected raffle prizes.</p></div>
@@ -603,8 +607,8 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-14T07:00:00" data-end="2026-10-14T08:00:00">7:00 AM–8:00 AM</p>
               <div class="session-grid">
-                <details class="session-card" data-tracks="ML"><summary>
-                  <div class="flex items-start justify-between gap-4"><span style="min-width:0;"><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Breakfast / Leadership Networking</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="block font-bold" style="color:#17231d;font-size:20px;">City Manager and Public Works Director Breakfast</span><span class="mt-1 block" style="color:#5d675f;">William Sheppard, Hunter Askew, and Sean McKelvey · 2nd/4th Floor</span></span><span class="sponsor-row" style="margin-left:auto;align-self:center;"><span class="sponsor-label">Sponsored by:</span><img id="breakfast-sponsor-logo-img" src="https://raw.githubusercontent.com/MBurlesonOMAG/OMAG-2026-sewer-agenda/main/images/ITpipes%20Logo%20H%20Pos%20A%20PMS%20Navy%20blue%20copy%20%282%29.png" alt="ITpipes logo"></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
+                <details class="session-card" data-tracks="ML" data-floor="2nd"><summary>
+                  <div class="flex items-start justify-between gap-4"><span style="min-width:0;"><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Breakfast / Leadership Networking</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="block font-bold" style="color:#17231d;font-size:20px;">City Manager and Public Works Director Breakfast</span><span class="mt-1 block" style="color:#5d675f;">William Sheppard, Hunter Askew, and Sean McKelvey · 2nd Floor</span></span><span class="sponsor-row" style="margin-left:auto;align-self:center;"><span class="sponsor-label">Sponsored by:</span><img id="breakfast-sponsor-logo-img" src="https://raw.githubusercontent.com/MBurlesonOMAG/OMAG-2026-sewer-agenda/main/images/ITpipes%20Logo%20H%20Pos%20A%20PMS%20Navy%20blue%20copy%20%282%29.png" alt="ITpipes logo"></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail">
                     <p class="leading-relaxed" style="color:#5d675f;">Join public works directors, city managers, administrators, and other municipal leaders for a networking breakfast focused on emerging trends, shared challenges, and innovative ideas. Connect with peers, exchange best practices, and discover strategies to help Oklahoma cities and towns succeed.</p>
@@ -615,7 +619,7 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-14T08:00:00" data-end="2026-10-14T08:15:00">8:00 AM–8:15 AM</p>
               <div class="session-grid">
-                <details class="session-card"><summary>
+                <details class="session-card" data-floor="1st"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Priority Session</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Welcome and Morning Announcements</span><span class="mt-1 block" style="color:#5d675f;">Hunter Askew · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">Opening remarks, schedule information, and announcements for the second day of the Expo.</p></div>
@@ -625,7 +629,7 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-14T08:20:00" data-end="2026-10-14T09:10:00">8:20 AM–9:10 AM</p>
               <div class="session-grid">
-                <details class="session-card"><summary>
+                <details class="session-card" data-floor="1st"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Priority Session</span><span class="block font-bold" style="color:#17231d;font-size:20px;">WHAT LIES BENEATH – See the Pipe. Make the Call. Live With the Consequences.</span><span class="mt-1 block" style="color:#5d675f;">William Sheppard and Hunter Askew · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This interactive session will put attendees in the decision-maker's seat as they review real sewer CCTV footage, assess system conditions, and determine what action to take. Attendees will work together to weigh risk, cost, and priorities, debate their decisions, and learn from real-world sewer overflow claims.</p></div>
@@ -635,17 +639,17 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-14T09:20:00" data-end="2026-10-14T10:10:00">9:20 AM–10:10 AM</p>
               <div class="session-grid">
-                <details class="session-card" data-tracks="ML UM"><summary>
+                <details class="session-card" data-tracks="ML UM" data-floor="2nd"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Building Stronger Communities Through Education, Standards, and Partnership</span><span class="mt-1 block" style="color:#5d675f;">Brian Smith, PhD · 2nd Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will introduce the United States Fat, Oil and Grease Alliance (USFOGA) and its mission to strengthen collaboration across the wastewater industry. Attendees will learn about emerging FOG management challenges, public-private partnership opportunities, and resources that support compliance, reduce risk, and improve operational performance.</p></div>
                 </details>
-                <details class="session-card" data-tracks="FO UM"><summary>
+                <details class="session-card" data-tracks="FO UM" data-floor="4th"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="activity-pill ml-1" style="background:rgb(239,108,34);color:#fff;">FO</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Next-Generation Public Works Is Powered by ArcGIS</span><span class="mt-1 block" style="color:#5d675f;">Greg Hakman · 4th Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will explore how GIS can help public works organizations modernize operations and improve decision-making. Attendees will learn through real-world case studies how ArcGIS can integrate AI, real-time data, drones, IoT, and digital twins to address infrastructure, resilience, funding, and service-delivery challenges.</p></div>
                 </details>
-                <details class="session-card" data-tracks="UM"><summary>
+                <details class="session-card" data-tracks="UM" data-floor="1st"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Record Keeping for the Future, Your Successor Will Thank You</span><span class="mt-1 block" style="color:#5d675f;">Curtis Richards · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will explore the importance of accurate record keeping for utility operations. Attendees will learn how strong records support regulatory compliance, troubleshooting, institutional knowledge, daily operations, and long-term planning.</p></div>
@@ -666,17 +670,17 @@
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-14T10:40:00" data-end="2026-10-14T11:30:00">10:40 AM–11:30 AM</p>
               <div class="session-grid">
 
-                <details class="session-card" data-tracks="ML UM"><summary>
+                <details class="session-card" data-tracks="ML UM" data-floor="1st"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Capital Improvement Planning for Small Systems</span><span class="mt-1 block" style="color:#5d675f;">A.J. Barney · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will introduce the fundamentals of capital improvement planning for utility systems. Attendees will learn about the key components of a capital improvement plan and simple tools that can be used to begin developing and organizing future capital projects.</p></div>
                 </details>
-                <details class="session-card" data-tracks="FO UM"><summary>
+                <details class="session-card" data-tracks="FO UM" data-floor="2nd"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(239,108,34);color:#fff;">FO</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">From Storm Event to Action: Pinpointing I&amp;I Without Drowning in Data</span><span class="mt-1 block" style="color:#5d675f;">Mark LaPlante · 2nd Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">Learn how systemwide screening and targeted confirmation work together in an effective inflow and infiltration (I&amp;I) program. This session will explore how to interpret wet-weather response patterns, prioritize field investigations, and use remote monitoring and automated reporting to improve efficiency while reducing unnecessary field exposure.</p></div>
                 </details>
-                <details class="session-card" data-tracks="FO UM"><summary>
+                <details class="session-card" data-tracks="FO UM" data-floor="4th"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(239,108,34);color:#fff;">FO</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Air Valves 101. The different types, operations and maintenance.</span><span class="mt-1 block" style="color:#5d675f;">Andrew Moseley · 4th Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will explain the importance of air valves to the performance and reliability of force mains and lift stations. Attendees will learn about proper operation, routine maintenance, common issues, and strategies for improving pumping efficiency and extending system life.</p></div>
@@ -696,24 +700,24 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-14T12:45:00" data-end="2026-10-14T13:35:00">12:45 PM–1:35 PM</p>
               <div class="session-grid">
-                <details class="session-card" data-tracks="FO ML UM"><summary>
+                <details class="session-card" data-tracks="FO ML UM" data-floor="vh"><summary>
                   <div class="flex items-start justify-between gap-4"><span style="min-width:0;"><span class="activity-pill" style="background:#000;color:#fff;">Vendor Demo</span><span class="block"><span class="activity-pill" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="activity-pill ml-1" style="background:rgb(239,108,34);color:#fff;">FO</span></span><span class="block font-bold" style="color:#17231d;font-size:20px;">Work Smarter Underground: How AI Is Changing the Future of Sewer Inspection</span><span class="mt-1 block" style="color:#5d675f;">ITpipes · Vendor Hall</span></span><span class="sponsor-row" style="margin-left:auto;align-self:center;"><img id="itpipes-vendor-logo-img" src="https://raw.githubusercontent.com/MBurlesonOMAG/OMAG-2026-sewer-agenda/main/images/ITpipes%20Logo%20H%20Pos%20A%20PMS%20Navy%20blue%20copy%20%282%29.png" alt="ITpipes logo" data-fallback="ITpipes" onerror="sponsorLogoFallback(this)"></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This live demonstration will explore how AI can support sewer condition assessment and inspection workflows. Attendees will learn how AI can improve defect recognition, coding accuracy, and decision-making while maintaining human oversight and supporting more proactive infrastructure management.</p></div>
                 </details>
-                <details class="session-card" data-tracks="FO ML UM"><summary>
+                <details class="session-card" data-tracks="FO ML UM" data-floor="outside"><summary>
                   <div class="flex items-start justify-between gap-4"><span style="min-width:0;"><span class="activity-pill" style="background:#000;color:#fff;">Vendor Demo</span><span class="block"><span class="activity-pill" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="activity-pill ml-1" style="background:rgb(239,108,34);color:#fff;">FO</span></span><span class="block font-bold" style="color:#17231d;font-size:20px;">Jetter Nozzles</span><span class="mt-1 block" style="color:#5d675f;">KEG · Outside</span></span><span class="sponsor-row" style="margin-left:auto;align-self:center;"><img id="keg-vendor-logo-img" src="images/sponsors/KEG%20LOGO.jpg" alt="KEG logo" data-fallback="KEG" onerror="sponsorLogoFallback(this)"></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This live demonstration will explore sewer nozzle safety, operation, and performance. Attendees will learn about Tier 1, Tier 2, and Tier 3 nozzle types and see how flow, pressure loss, and nozzle angles affect cleaning performance in the field.</p></div>
                 </details>
-                <details class="session-card" data-tracks="FO UM"><summary>
+                <details class="session-card" data-tracks="FO UM" data-floor="2nd"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(239,108,34);color:#fff;">FO</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">United Point Repair™: Advancing Sectional Sewer Rehabilitation with Engineered Composite Repairs</span><span class="mt-1 block" style="color:#5d675f;">Logan Shull · 2nd Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will provide an overview of the United Point Repair™ system, an internally installed composite solution for structurally compromised pipe segments. Attendees will learn how the technology provides permanent repairs while minimizing excavation, service disruption, and impacts to surrounding communities.</p></div>
                 </details>
 
-                <details class="session-card" data-tracks="FO UM"><summary>
-                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(239,108,34);color:#fff;">FO</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Stop Guessing Your Cleaning Schedule: How One Operator Used Level Data to Rewrite the Calendar</span><span class="mt-1 block" style="color:#5d675f;">Jeremiah Mancini · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
+                <details class="session-card" data-tracks="FO UM" data-floor="4th"><summary>
+                  <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(239,108,34);color:#fff;">FO</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Stop Guessing Your Cleaning Schedule: How One Operator Used Level Data to Rewrite the Calendar</span><span class="mt-1 block" style="color:#5d675f;">Jeremiah Mancini · 4th Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will explore how the City of Bellevue replaced calendar-based sewer cleaning with line-specific intervals informed by non-contact radar level sensors. Attendees will learn how the approach reduced unnecessary cleaning, freed up crews, limited wear on sound pipe, and created a more defensible, data-driven maintenance schedule.</p></div>
                 </details>
@@ -732,17 +736,17 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-14T14:20:00" data-end="2026-10-14T15:10:00">2:20 PM–3:10 PM</p>
               <div class="session-grid">
-                <details class="session-card" data-tracks="ML UM"><summary>
+                <details class="session-card" data-tracks="ML UM" data-floor="1st"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Long Term Planning</span><span class="mt-1 block" style="color:#5d675f;">Jeremy McBride · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">Our team will present the Choctaw Nation's new Asset Management Tool, Oka Vlhpisa, a resource designed to assist rural utilities in improving infrastructure planning, asset tracking, maintenance scheduling, and long-term capital planning.</p></div>
                 </details>
-                <details class="session-card" data-tracks="ML UM"><summary>
+                <details class="session-card" data-tracks="ML UM" data-floor="2nd"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Investing in A Clean Water Future: Leveraging the CWSRF for Nature-Based Solutions</span><span class="mt-1 block" style="color:#5d675f;">Emerson O'Donnell · 2nd Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will introduce nature-based solutions and green infrastructure as strategies for wastewater infrastructure and services. Attendees will learn about the Clean Water State Revolving Fund (CWSRF), the role of debt financing in major infrastructure investments, and available CWSRF incentives for implementing nature-based solutions.</p></div>
                 </details>
-                <details class="session-card" data-tracks="FO UM"><summary>
+                <details class="session-card" data-tracks="FO UM" data-floor="4th"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(239,108,34);color:#fff;">FO</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Stopping Roots Before They Stop the System: A Modern Approach to Sewer Infrastructure Protection</span><span class="mt-1 block" style="color:#5d675f;">Brian Conroy · 4th Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will explore how municipalities can proactively address sewer root intrusion using Duke's Root Control Services and Razorooter® chemical foaming technology. Attendees will learn about the limitations of mechanical root cutting, the science of root growth, and how preventative treatment can reduce blockages, SSOs, maintenance costs, and infrastructure damage.</p></div>
@@ -752,18 +756,18 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-14T15:20:00" data-end="2026-10-14T16:10:00">3:20 PM–4:10 PM</p>
               <div class="session-grid">
-                <details class="session-card" data-tracks="ML UM"><summary>
+                <details class="session-card" data-tracks="ML UM" data-floor="1st"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="activity-pill ml-1" style="background:rgb(81,112,255);color:#fff;">ML</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Identifying Practical, Scalable Solutions to Maximize the Long-Term Value of Limited Resources</span><span class="mt-1 block" style="color:#5d675f;">David Jett · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will explore how the City of Tulsa combines modern technologies with proven maintenance practices to manage its aging sanitary sewer system. Attendees will learn about Tulsa's approach and practical, cost-effective strategies that smaller municipalities can apply to address similar infrastructure challenges.</p></div>
                 </details>
 
-                <details class="session-card" data-tracks="FO UM"><summary>
+                <details class="session-card" data-tracks="FO UM" data-floor="2nd"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(239,108,34);color:#fff;">FO</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Get the F.R.O.G. Out</span><span class="mt-1 block" style="color:#5d675f;">Drew Raffensperger · 2nd Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will examine two common sewer system challenges: root intrusion and grease buildup. Attendees will learn about the primary types of root intrusion, the problems caused by grease accumulation, and practical solutions for addressing and preventing both issues.</p></div>
                 </details>
-                <details class="session-card" data-tracks="FO UM"><summary>
+                <details class="session-card" data-tracks="FO UM" data-floor="4th"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(239,108,34);color:#fff;">FO</span><span class="activity-pill ml-1" style="background:rgb(0,191,99);color:#fff;">UM</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Build a Better Manhole Chimney</span><span class="mt-1 block" style="color:#5d675f;">Jason Jones · 4th Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">This session will explore composite manhole covers, HDPE grade rings, and Sentry vent systems for wastewater applications. Attendees will learn how these products can improve durability, reduce corrosion and inflow, support ventilation, and provide practical alternatives to traditional manhole components.</p></div>
@@ -773,7 +777,7 @@
             <div class="time-group">
               <p class="time-label font-bold" style="color:#17231d;font-size:20px;" data-start="2026-10-14T16:10:00" data-end="2026-10-14T16:30:00">4:10 PM–4:30 PM</p>
               <div class="session-grid">
-                <details class="session-card"><summary>
+                <details class="session-card" data-floor="1st"><summary>
                   <div class="flex items-start justify-between gap-4"><span><span class="activity-pill" style="background:rgb(255,49,49);color:#fff;">Priority Session</span><span class="block font-bold" style="color:#17231d;font-size:20px;">Closing Remarks / Raffle Prizes</span><span class="mt-1 block" style="color:#5d675f;">William Sheppard and Hunter Askew · 1st Floor</span></span><i data-lucide="chevron-down" class="chevron mt-2 h-5 w-5"></i></div>
                 </summary>
                   <div class="session-detail"><p class="leading-relaxed" style="color:#5d675f;">Final remarks, event wrap-up, and closing announcements for the 2026 OMAG Sanitary Sewer Expo.</p></div>
@@ -1254,6 +1258,8 @@
     // a "Cannot access 'activeTrack' before initialization" error.
     const filterChips = [...document.querySelectorAll(".track-chip")];
     let activeTrack = "all";
+    const floorChips = [...document.querySelectorAll(".floor-chip")];
+    let activeFloor = "all";
 
     function paintTab(tab, selected) {
       tab.style.setProperty("background", selected ? "#ef6c22" : "#17231d", "important");
@@ -1296,9 +1302,8 @@
       });
       status.textContent = names[selectedTab.id] + (statusSuffix[selectedTab.id] || " schedule displayed");
       const isSponsors = selectedTab.id === "sponsors-tab";
-      const trackFiltersEl = document.querySelector(".track-filters");
+      document.querySelectorAll(".track-filters").forEach(el => { el.style.display = isSponsors ? "none" : ""; });
       const trackLegendEl = document.getElementById("track-legend");
-      if (trackFiltersEl) trackFiltersEl.style.display = isSponsors ? "none" : "";
       if (trackLegendEl) trackLegendEl.style.display = isSponsors ? "none" : "";
       if (!opts.skipHash) {
         suppressHashUpdate = true;
@@ -1636,13 +1641,15 @@
     checkForContentUpdate();
     setInterval(checkForContentUpdate, 5 * 60000);
 
-    // --- Track filter chips ---
+    // --- Track & floor filter chips ---
 
     function refreshFilters() {
       document.querySelectorAll(".session-card").forEach(card => {
         const tracks = (card.dataset.tracks || "").split(" ").filter(Boolean);
-        const show = activeTrack === "all" || tracks.length === 0 || tracks.includes(activeTrack);
-        card.classList.toggle("is-filtered-out", !show);
+        const trackOk = activeTrack === "all" || tracks.length === 0 || tracks.includes(activeTrack);
+        const floor = card.dataset.floor || "";
+        const floorOk = activeFloor === "all" || floor === "" || floor === activeFloor;
+        card.classList.toggle("is-filtered-out", !(trackOk && floorOk));
       });
       document.querySelectorAll(".time-group").forEach(group => {
         const cards = [...group.querySelectorAll(".session-card")];
@@ -1659,27 +1666,26 @@
       });
     });
 
-    // --- Expand all / collapse all (applies to the currently visible day) ---
-    function toggleAllInVisibleDay(open) {
-      const visiblePanel = document.querySelector(".day-panel:not(.hidden)");
-      if (!visiblePanel) return;
-      visiblePanel.querySelectorAll("details.session-card").forEach(d => { d.open = open; });
-    }
-    document.getElementById("expand-all-btn").addEventListener("click", () => toggleAllInVisibleDay(true));
-    document.getElementById("collapse-all-btn").addEventListener("click", () => toggleAllInVisibleDay(false));
+    floorChips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        activeFloor = chip.dataset.floor;
+        floorChips.forEach(c => c.setAttribute("aria-pressed", String(c === chip)));
+        refreshFilters();
+      });
+    });
 
-    // --- Sponsors & Vendors: accordion behavior — opening one card closes any others ---
-    const sponsorsPanelEl = document.getElementById("sponsors-panel");
-    if (sponsorsPanelEl) {
-      sponsorsPanelEl.querySelectorAll("details.session-card").forEach(card => {
+    // --- Accordion behavior on every day panel (Monday/Tuesday/Wednesday/Sponsors & Vendors):
+    //     opening one card closes any other open card within that same panel.
+    document.querySelectorAll(".day-panel").forEach(panel => {
+      panel.querySelectorAll("details.session-card").forEach(card => {
         card.addEventListener("toggle", () => {
           if (!card.open) return;
-          sponsorsPanelEl.querySelectorAll("details.session-card[open]").forEach(other => {
+          panel.querySelectorAll("details.session-card[open]").forEach(other => {
             if (other !== card) other.open = false;
           });
         });
       });
-    }
+    });
 
     // --- Add-to-calendar (.ics) buttons on every session card ---
     function pad(n) { return String(n).padStart(2, "0"); }
