@@ -1640,6 +1640,25 @@
     checkForContentUpdate();
     setInterval(checkForContentUpdate, 5 * 60000);
 
+    // --- Idle auto-reset: after 4 minutes with no touch/click/key activity,
+    // close every open session card and clear any active track/floor filters
+    // so the kiosk returns to a clean default state for the next visitor ---
+    function idleAutoReset() {
+      const idleMs = Date.now() - lastInteractionAt;
+      if (idleMs < 4 * 60000) return;
+      document.querySelectorAll("details.session-card[open]").forEach(d => { d.open = false; });
+      if (activeTrack !== "all") {
+        activeTrack = "all";
+        filterChips.forEach(c => c.setAttribute("aria-pressed", String(c.dataset.track === "all")));
+      }
+      if (activeFloor !== "all") {
+        activeFloor = "all";
+        floorChips.forEach(c => c.setAttribute("aria-pressed", String(c.dataset.floor === "all")));
+      }
+      refreshFilters();
+    }
+    setInterval(idleAutoReset, 15000);
+
     // --- Track & floor filter chips ---
 
     function refreshFilters() {
